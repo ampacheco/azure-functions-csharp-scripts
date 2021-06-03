@@ -23,8 +23,39 @@ WEBSITE_TIME_ZONE="Pacific SA Standard Time"
 
 
 ````C#
+...
+#r "Microsoft.ApplicationInsights"
+...
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+...
+
+public static IActionResult Run(HttpRequest req, ILogger log)
+{    
+
+    var appInsights = GetTelemetryClient();
+
+    ...
+    
+    appInsights.TrackTrace(time, SeverityLevel.Verbose);            // 0 - Verbose
+    appInsights.TrackTrace(time, SeverityLevel.Information);        // 1 - Information
+    appInsights.TrackTrace(time, SeverityLevel.Warning);            // 2 - Warning
+    appInsights.TrackTrace(time, SeverityLevel.Error);              // 3 - Error
+    appInsights.TrackTrace(time, SeverityLevel.Critical);           // 4 - Critical
+
+    ...
+    
+    return new OkObjectResult(responseMessage);
+}
+
+
+
+// Get Telemetry Client Function 
+private static TelemetryClient GetTelemetryClient()
+{
+    var telemetryClient = new TelemetryClient();
+    telemetryClient.InstrumentationKey = [--Insert-Instrumentation-Key--Or-Use-Configuration-Var--];
+    return telemetryClient;
+}
 
 ````
-
-
-
